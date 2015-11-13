@@ -17,16 +17,15 @@ class SQLObject
   end
 
   def self.finalize!
-
     columns.each do |column|
 
-      define_method("@#{column}")
+      define_method("#{column}") do
+        attributes[column]
+      end
 
-
-
-
-    def attributes
-      @attributes ||= {}
+      define_method("#{column}=") do |value|
+        attributes[column] = value
+      end
     end
   end
 
@@ -39,11 +38,21 @@ class SQLObject
   end
 
   def self.all
-    # ...
+    results = DBConnection.execute(<<-SQL)
+      SELECT
+        *
+      FROM
+        "#{table_name}"
+    SQL
   end
 
   def self.parse_all(results)
-    # ...
+
+    new_results = results.map do |result|
+      self.new(result)
+    end
+
+    new_results.all
   end
 
   def self.find(id)
@@ -51,15 +60,21 @@ class SQLObject
   end
 
   def initialize(params = {})
-    # ...
+    params.each do |attr_name, value|
+      if self.class.columns.include?(attr_name)
+        self.send "#{attr_name}=", value
+      else
+        raise "unknown attribute '#{attr_name}'"
+      end
+    end
   end
 
   def attributes
-    # ...
+    @attributes ||= {}
   end
 
   def attribute_values
-    # ...
+    @attributes.values
   end
 
   def insert
