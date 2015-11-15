@@ -1,6 +1,5 @@
 require_relative 'db_connection'
 require 'active_support/inflector'
-require 'byebug'
 # NB: the attr_accessor we wrote in phase 0 is NOT used in the rest
 # of this project. It was only a warm up.
 
@@ -51,11 +50,7 @@ class SQLObject
   end
 
   def self.parse_all(results)
-
-    new_results = results.map do |result|
-      self.new(result)
-    end
-
+    results.map { |result| self.new(result) }
   end
 
   def self.find(id)
