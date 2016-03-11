@@ -54,7 +54,6 @@ class SQLObject
   end
 
   def self.find(id)
-    # debugger
     found = DBConnection.execute(<<-SQL, id)
       SELECT
         *
@@ -112,7 +111,6 @@ class SQLObject
     end
 
     set_line = set_line.join(", ")
-    debugger
 
     update = DBConnection.execute(<<-SQL, *attribute_values, id)
       UPDATE

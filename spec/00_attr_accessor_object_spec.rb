@@ -1,5 +1,4 @@
 require '00_attr_accessor_object'
-require 'byebug'
 
 describe AttrAccessorObject do
   before(:all) do
@@ -21,7 +20,7 @@ describe AttrAccessorObject do
   end
 
   it '#my_attr_accessor methods really get and set' do
-    
+
     obj.x = 'xxx'
     obj.y = 'yyy'
 
